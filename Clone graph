@@ -1,0 +1,52 @@
+/**
+ * Definition for undirected graph.
+ * public class UndirectedGraphNode {
+ *     public int label;
+ *     public IList<UndirectedGraphNode> neighbors;
+ *     public UndirectedGraphNode(int x) { label = x; neighbors = new List<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    public UndirectedGraphNode CloneGraph(UndirectedGraphNode node) {
+        
+        if(node == null)
+            return null;
+        
+        Hashtable map = new Hashtable();
+        Queue<UndirectedGraphNode> queue = new Queue<UndirectedGraphNode>();
+        
+        UndirectedGraphNode clone = new UndirectedGraphNode(node.label);
+        map.Add(node,clone);
+        queue.Enqueue(node);
+        
+        while(queue.Count != 0)
+        {
+            UndirectedGraphNode source = queue.Dequeue();
+            UndirectedGraphNode clon = (UndirectedGraphNode)map[source];
+            //IList<UndirectedGraphNode> neighbours = source.neighbors;
+            foreach(UndirectedGraphNode neigh in source.neighbors)
+            {
+                UndirectedGraphNode cloneneigh = (UndirectedGraphNode)map[neigh];
+                if(cloneneigh == null)
+                {
+                    cloneneigh = new UndirectedGraphNode(neigh.label);
+                    map.Add(neigh,cloneneigh);
+                    queue.Enqueue(neigh);
+                    clon.neighbors.Add(cloneneigh);
+                }
+                else
+                {
+                    clon.neighbors.Add(cloneneigh);
+                }
+                
+            }
+            
+            
+            
+        }
+        
+        return clone;
+        
+        
+    }
+}
