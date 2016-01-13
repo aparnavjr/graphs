@@ -1,0 +1,66 @@
+public class Solution {
+    public bool CanFinish(int numCourses, int[,] prerequisites) {
+        
+        if(numCourses == 0)
+            return true;
+        if(prerequisites.Length == 0)
+            return true;
+            
+        Dictionary<int, List<int>> map = new Dictionary<int,List<int>>();
+        
+        for(int i = 0; i< prerequisites.GetLength(0);i++)
+        {
+            if(map.ContainsKey(prerequisites[i,0]))
+            {
+                List<int> child = map[prerequisites[i,0]];
+                child.Add(prerequisites[i,1]);
+                map[prerequisites[i,0]] = child;
+            }
+            
+            else
+            {
+                List<int> child = new List<int>();
+                child.Add(prerequisites[i,1]);
+                 map.Add(prerequisites[i,0] ,child);
+                
+            }
+        }
+        
+        bool[] visited = new bool[numCourses];
+        
+        for(int i =0;i< numCourses;i++)
+        {
+            if(IsCyclic(i,visited,map))
+            return false;
+        }
+        
+        return true;
+        
+
+}
+
+    public bool IsCyclic(int vertex,bool[] visited, Dictionary<int,List<int>> map )
+    {
+        if(visited[vertex] == true)
+            return true;
+            
+        
+        visited[vertex]= true;
+        
+        if(map.ContainsKey(vertex))
+        {
+            List<int> neighbours = map[vertex];
+            if(neighbours.Count !=0)
+            {
+                foreach(int neigh in neighbours)
+                {
+                    if(IsCyclic(neigh,visited,map))
+                        return true;
+                }
+            }
+        }
+        visited[vertex] = false;
+        return false;
+        
+    }
+}
